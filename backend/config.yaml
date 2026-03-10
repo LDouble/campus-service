@@ -1,0 +1,36 @@
+# 服务器配置
+server:
+  port: 8080
+  read_timeout: 10s
+  write_timeout: 10s
+  mode: debug  # debug, release, test
+
+# 数据库配置
+database:
+  host: mysql
+  port: 3306
+  user: campus
+  password: campus123
+  dbname: campus_service
+  max_idle_conns: 10
+  max_open_conns: 100
+
+# Redis配置
+redis:
+  host: redis
+  port: 6379
+  password: ""
+  db: 0
+
+# JWT配置
+jwt:
+  access_token_secret: "your-access-token-secret-change-in-production"
+  refresh_token_secret: "your-refresh-token-secret-change-in-production"
+  access_token_expiry: 2h
+  refresh_token_expiry: 168h  # 7天
+  issuer: "campus-service"
+
+# 微信小程序配置
+wechat:
+  app_id: "your-wechat-app-id"
+  app_secret: "your-wechat-app-secret"
