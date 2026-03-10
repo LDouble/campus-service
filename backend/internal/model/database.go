@@ -67,6 +67,7 @@ func AutoMigrate() error {
 		&MarketFavorite{},
 		&LostFound{},
 		&LostFoundClaim{},
+		&AcademicBinding{},
 	)
 	if err != nil {
 		return fmt.Errorf("failed to migrate database: %w", err)

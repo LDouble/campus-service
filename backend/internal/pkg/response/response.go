@@ -39,6 +39,7 @@ const (
 	CodeUserDisabled    = 1004
 	CodeWeChatError     = 1005
 	CodeInvalidParam    = 1006
+	CodeBindingRequired = 1010 // 需要教务绑定
 )
 
 // 状态码消息映射
@@ -57,6 +58,7 @@ var codeMessages = map[int]string{
 	CodeUserDisabled:   "用户已被禁用",
 	CodeWeChatError:    "微信登录失败",
 	CodeInvalidParam:   "参数验证失败",
+	CodeBindingRequired: "请先绑定教务系统",
 }
 
 // GetMessage 获取状态码对应的消息

@@ -61,6 +61,13 @@ func Setup() *gin.Engine {
 		lfService := service.NewLostFoundService(lfRepo, userRepo)
 		lfHandler := handler.NewLostFoundHandler(lfService)
 		lfHandler.RegisterRoutes(v1, middleware.Auth())
+
+		// 教务绑定路由
+		bindingRepo := repository.NewAcademicBindingRepository(model.DB)
+		verifier := service.NewMockVerifier()
+		bindingService := service.NewAcademicBindingService(bindingRepo, verifier)
+		bindingHandler := handler.NewAcademicBindingHandler(bindingService)
+		bindingHandler.RegisterRoutes(v1)
 	}
 
 	// 404处理
