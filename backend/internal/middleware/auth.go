@@ -52,6 +52,7 @@ func Auth() gin.HandlerFunc {
 		// 将用户信息存入上下文
 		c.Set(ContextKeyUserID, claims.UserID)
 		c.Set(ContextKeyOpenID, claims.OpenID)
+		c.Set("jwt_claims", claims)
 
 		c.Next()
 	}

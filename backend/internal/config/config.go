@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/spf13/viper"
@@ -78,12 +79,35 @@ func Init(configPath string) error {
 
 	// Allow environment variable overrides
 	viper.AutomaticEnv()
+	if err := viper.BindEnv("DB_PASSWORD"); err != nil {
+		return fmt.Errorf("failed to bind env DB_PASSWORD: %w", err)
+	}
+	if err := viper.BindEnv("REDIS_PASSWORD"); err != nil {
+		return fmt.Errorf("failed to bind env REDIS_PASSWORD: %w", err)
+	}
+	if err := viper.BindEnv("JWT_ACCESS_TOKEN_SECRET"); err != nil {
+		return fmt.Errorf("failed to bind env JWT_ACCESS_TOKEN_SECRET: %w", err)
+	}
+	if err := viper.BindEnv("JWT_REFRESH_TOKEN_SECRET"); err != nil {
+		return fmt.Errorf("failed to bind env JWT_REFRESH_TOKEN_SECRET: %w", err)
+	}
 
 	if err := viper.ReadInConfig(); err != nil {
 		return fmt.Errorf("failed to read config file: %w", err)
 	}
 
 	Cfg = &Config{}
+
+	// 验证敏感配置环境变量
+	if os.Getenv("DB_PASSWORD") == "" {
+		return fmt.Errorf("DB_PASSWORD environment variable is required")
+	}
+	if os.Getenv("JWT_ACCESS_TOKEN_SECRET") == "" {
+		return fmt.Errorf("JWT_ACCESS_TOKEN_SECRET environment variable is required")
+	}
+	if os.Getenv("JWT_REFRESH_TOKEN_SECRET") == "" {
+		return fmt.Errorf("JWT_REFRESH_TOKEN_SECRET environment variable is required")
+	}
 
 	// Server config
 	Cfg.Server.Port = viper.GetInt("server.port")
@@ -95,7 +119,7 @@ func Init(configPath string) error {
 	Cfg.Database.Host = viper.GetString("database.host")
 	Cfg.Database.Port = viper.GetInt("database.port")
 	Cfg.Database.User = viper.GetString("database.user")
-	Cfg.Database.Password = viper.GetString("database.password")
+	Cfg.Database.Password = os.Getenv("DB_PASSWORD")
 	Cfg.Database.DBName = viper.GetString("database.dbname")
 	Cfg.Database.MaxIdleConns = viper.GetInt("database.max_idle_conns")
 	Cfg.Database.MaxOpenConns = viper.GetInt("database.max_open_conns")
@@ -103,12 +127,12 @@ func Init(configPath string) error {
 	// Redis config
 	Cfg.Redis.Host = viper.GetString("redis.host")
 	Cfg.Redis.Port = viper.GetInt("redis.port")
-	Cfg.Redis.Password = viper.GetString("redis.password")
+	Cfg.Redis.Password = os.Getenv("REDIS_PASSWORD")
 	Cfg.Redis.DB = viper.GetInt("redis.db")
 
 	// JWT config
-	Cfg.JWT.AccessTokenSecret = viper.GetString("jwt.access_token_secret")
-	Cfg.JWT.RefreshTokenSecret = viper.GetString("jwt.refresh_token_secret")
+	Cfg.JWT.AccessTokenSecret = os.Getenv("JWT_ACCESS_TOKEN_SECRET")
+	Cfg.JWT.RefreshTokenSecret = os.Getenv("JWT_REFRESH_TOKEN_SECRET")
 	Cfg.JWT.AccessTokenExpiry = viper.GetDuration("jwt.access_token_expiry")
 	Cfg.JWT.RefreshTokenExpiry = viper.GetDuration("jwt.refresh_token_expiry")
 	Cfg.JWT.Issuer = viper.GetString("jwt.issuer")

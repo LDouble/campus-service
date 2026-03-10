@@ -20,6 +20,7 @@ func Setup() *gin.Engine {
 	r := gin.New()
 
 	// 注册全局中间件
+	r.Use(middleware.RequestID())
 	r.Use(middleware.Logger())
 	r.Use(middleware.Recovery())
 	r.Use(middleware.CORS())
