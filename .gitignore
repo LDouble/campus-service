@@ -1,0 +1,36 @@
+# 环境变量
+.env
+.env.local
+.env.*.local
+
+# 编译产物
+/backend/campus-service
+/backend/main
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# 测试
+*.test
+*.out
+coverage.txt
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 日志
+*.log
+logs/
+
+# 依赖
+/vendor/
